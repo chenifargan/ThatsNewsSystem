@@ -45,7 +45,7 @@ public class JpaUsersService implements EnhancedUsersService {
         throw new UnsupportedOperationException("Method not supported, use enhanced method instead.");
     }
 
-//    @Override
+    @Override
     @Deprecated
     public void deleteAllUsers() {
         throw new UnsupportedOperationException("Method not supported, use enhanced method instead.");
@@ -83,8 +83,18 @@ public class JpaUsersService implements EnhancedUsersService {
     @Override
     @Transactional
     public UserBoundary updateUser(String userDomain, String userEmail, UserBoundary update) {
-        if (update.getUserId() != null && (!update.getUserId().getDomain().equals(userDomain) || !update.getUserId().getEmail().equals(userEmail))) {
-            throw new InvalidInputException("Updating a user's domain/email is forbidden");
+        if (update.getUserId() != null) { // only if userId is not null then check integrity
+            if (update.getUserId().getDomain() != null // only if domain is not null then check integrity
+                    && !update.getUserId().getDomain().equals(userDomain)
+            ) {
+                throw new InvalidInputException("Updating a user's domain is forbidden");
+            }
+
+            if (update.getUserId().getEmail() != null // only if email is not null then check integrity
+                    && !update.getUserId().getEmail().equals(userEmail)
+            ) {
+                throw new InvalidInputException("Updating a user's email is forbidden");
+            }
         }
 
         UserEntity user = usersDao

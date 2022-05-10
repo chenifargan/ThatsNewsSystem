@@ -18,6 +18,6 @@ public interface UsersService {
     List<UserBoundary> getAllUsers();
 
     @Deprecated
-    void deleteAllUsers(String userDomain, String userEmail);
+    void deleteAllUsers();
 
 }

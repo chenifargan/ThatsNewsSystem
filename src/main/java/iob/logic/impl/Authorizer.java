@@ -31,7 +31,7 @@ public class Authorizer {
      * @param authorizedRoles - authorized roles for calling action
      * @return UserEntity if user is authorized, otherwise if no user is passed and action can be performed by default - null.
      * @throws UnauthorizedException if user is not authorized
-     * @throws EntityNotFoundException if user is no such user in the database
+     * @throws EntityNotFoundException if there is no such user in the database
      */
     @Transactional(readOnly = true)
     public UserEntity authorize(String requesterDomain, String requesterEmail, UserRole... authorizedRoles) {
@@ -46,7 +46,7 @@ public class Authorizer {
      * @param authorizedRoles - authorized roles for calling action
      * @return UserEntity if user is authorized, otherwise if no user is passed and action can be performed by default - null.
      * @throws UnauthorizedException if user is not authorized
-     * @throws EntityNotFoundException if user is no such user in the database
+     * @throws EntityNotFoundException if there is no such user in the database
      */
     @Transactional(readOnly = true)
     public UserEntity authorize(boolean userRequired, String requesterDomain, String requesterEmail, UserRole... authorizedRoles) {

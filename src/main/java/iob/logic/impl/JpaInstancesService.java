@@ -101,27 +101,44 @@ public class JpaInstancesService implements EnhancedInstancesService {
 
     @Override
     @Transactional
-    public InstanceBoundary updateInstance(String requesterDomain, String requesterEmail, String instanceDomain, String instanceId, InstanceBoundary update) {
+    public InstanceBoundary updateInstance(
+            String requesterDomain,
+            String requesterEmail,
+            String instanceDomain,
+            String instanceId,
+            InstanceBoundary update
+    ) {
         authorizer.authorize(requesterDomain, requesterEmail, UserRole.MANAGER);
 
-        if (
-                update.getInstanceId() != null
-                        && (!update.getInstanceId().getDomain().equals(instanceDomain)
-                        || !update.getInstanceId().getId().equals(instanceId))
-        ) {
-            throw new InvalidInputException("Updating an instance's domain/email is forbidden");
+        if (update.getInstanceId() != null) { // only if instanceId is not null then check integrity
+            if (update.getInstanceId().getDomain() != null // only if instanceId.domain is not null then check integrity
+                    && !update.getInstanceId().getDomain().equals(instanceDomain)
+            ) {
+                throw new InvalidInputException("Updating an instance's domain is forbidden");
+            }
+            if (update.getInstanceId().getId() != null // only if instanceId.id is not null then check integrity
+                    && !update.getInstanceId().getId().equals(instanceId)
+            ) {
+                throw new InvalidInputException("Updating an instance's id is forbidden");
+            }
         }
 
         InstanceEntity entity = instancesDao
                 .findById(converter.toEntity(instanceDomain, instanceId))
                 .orElseThrow(() -> new EntityNotFoundException("no such instance", instanceDomain, instanceId));
 
-        if (
-                !converter.toEntity(update.getCreatedBy()).equals(entity.getCreatedBy())
-                        || !update.getCreatedTimestamp().equals(entity.getCreatedTimestamp())
+        if (update.getCreatedBy() != null // only if createdBy is not null then check integrity
+                && !converter.toEntity(update.getCreatedBy()).equals(entity.getCreatedBy())
         ) {
-            throw new InvalidInputException("Updating an instance's creation attributes is forbidden");
+            throw new InvalidInputException("Updating an instance's `createdBy` property is forbidden");
         }
+
+        if (update.getCreatedTimestamp() != null // only if createdTimestamp is not null then check integrity
+                && !update.getCreatedTimestamp().equals(entity.getCreatedTimestamp())
+        ) {
+            throw new InvalidInputException("Updating an instance's `createdTimestamp` property is forbidden");
+        }
+
 
         if (update.getName() != null) {
             entity.setName(update.getName());
