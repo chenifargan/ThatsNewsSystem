@@ -1,2 +1,4 @@
 # ThatsNews
-(Work In Progress) A news website - Full-Stack project, using the 3-Tier architecture.
+A news website - Full-Stack project, using the 3-Tier architecture.
+- Backend: Spring, MySQL
+- Frontend: React
