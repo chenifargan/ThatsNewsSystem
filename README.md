@@ -1,6 +1,8 @@
 # ThatsNews
 A news website - Full-Stack project, using the 3-Tier architecture.
 
+The articles displayed and processed in the system are pulled from a 3rd party API: [`newsapi.org`](https://newsapi.org/)
+
 The client communicates with the back-end via a general purpose predefined REST API.
 
 - Backend: Spring, MySQL
